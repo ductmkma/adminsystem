@@ -5,7 +5,6 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -13,6 +12,12 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+
+import com.zent.dto.MenuDTO;
+import com.zent.dto.StateDTO;
 
 
 /**
@@ -33,7 +38,20 @@ public class MenuBO implements Serializable {
 	public MenuBO() {
 	}
 
-
+	public MenuDTO toDTO(Boolean check) {
+		MenuDTO dto = new MenuDTO();
+		dto.setId(id.toString());
+		dto.setText(name);
+		dto.setUrl(url);
+		if (parent!=null) {
+			dto.setParent(parent.getId().toString());
+		}else dto.setParent("#");
+		StateDTO stateDTO = new StateDTO();
+		stateDTO.setSelected(check);
+		stateDTO.setOpened(true);
+		dto.setState(stateDTO);
+		return dto;
+	}
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name = "id", unique = true, nullable = false)
@@ -73,7 +91,8 @@ public class MenuBO implements Serializable {
 	public void setParent(MenuBO parent) {
 		this.parent = parent;
 	}
-	@OneToMany(fetch=FetchType.LAZY,mappedBy="parent")
+	@LazyCollection(LazyCollectionOption.FALSE)
+	@OneToMany(mappedBy="parent")
 	public List<MenuBO> getSubmenus() {
 		return submenus;
 	}
@@ -81,7 +100,8 @@ public class MenuBO implements Serializable {
 	public void setSubmenus(List<MenuBO> submenus) {
 		this.submenus = submenus;
 	}
-	@OneToMany(fetch=FetchType.EAGER, mappedBy = "menu")
+	@LazyCollection(LazyCollectionOption.FALSE)
+	@OneToMany(mappedBy = "menu")
 	public List<RoleMenuBO> getRoleMenus() {
 		return this.roleMenus;
 	}

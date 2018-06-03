@@ -99,6 +99,7 @@
                   		</div>
                   	</div>
                   </div>
+                  		
                       <table id="tablerole" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
                       	 <thead>
 		                        <tr>
@@ -121,28 +122,41 @@
         <!-- /page content -->
 <%@include file="footer.jsp" %> 
     <script type="text/javascript">
-    	function abc(){
-    		
-    		return datatest;
+    	function addRoleMenu(roleId){
+    		var ctx = "${pageContext.request.contextPath}";
+    		$('#jstree').on('changed.jstree', function (e, data) {
+    			var status = data.action;
+    			if(data.node.id!=undefined){
+    				var menuId = data.node.id;
+    			}
+    			$.ajax({
+        	        url: ctx+"/insertrolemenu",
+        	        type: 'POST',
+        	        data : 
+        	        {
+        	        	roleId: roleId,
+        	        	menuId: menuId,
+        	        	status: status
+        	        },
+        	        success: function (data) {
+        	        	if(data.status=="ADDED"){
+        	        		toastr.success("Thêm menu thành công !")
+        	        	}if(data.status=="DELETED"){
+        	        		toastr.success("Xóa thành công !")
+        	        	}else if(data.status=="FAIL"){
+        	        		toastr.error("Error !")
+        	        	}
+        	        	
+        	        },
+        	        error:function(data,status,er) {
+        	            toastr.error(er);
+        	        }
+        	    });
+            });
     	}
     	$(document).ready(function(){
-			var a = abc();
+    		
     		var ctx = "${pageContext.request.contextPath}";
-    		$('#jstree').jstree({
-    			  'plugins': ['checkbox', 'wholerow'],
-    			  'core': {
-    			    'data':a ,
-    			    'animation': false,
-    			    //'expand_selected_onload': true,
-    			    'themes': {
-    			      'icons': false,
-    			    }
-    			  },
-    			  'search': {
-    			    'show_only_matches': true,
-    			    'show_only_matches_children': true
-    			  }
-    			});
       		$("#tablerole").DataTable( {
       	        "bProcessing": true,
       	        "bServerSide": true,
@@ -194,6 +208,38 @@
       		//add menu
       		$("#tablerole").on("click",'.btn-menu',function(){
       			$("#modal-menu").modal("show");
+      			
+      			var roleId = $(this).attr('id');
+      			$.ajax({
+        	        url: ctx+"/listmenu",
+        	        type: 'GET',
+        	        data : {id: roleId},
+        	        dataType: 'json',
+        	        contentType: 'application/json',
+        	        mimeType: 'application/json',
+        	        success: function (data) {
+        	        	$('#jstree').jstree({
+        	    			  'plugins': ['checkbox', 'wholerow'],
+        	    			  'core': {
+        	    			    'data':data,
+        	    			    "cache":false,
+        	    			    'animation': false,
+        	    			    //'expand_selected_onload': true,
+        	    			    'themes': {
+        	    			      'icons': false,
+        	    			    }
+        	    			  },
+        	    			  'search': {
+        	    			    'show_only_matches': true,
+        	    			    'show_only_matches_children': true
+        	    			  }
+        	    			});
+        	        },
+        	        error:function(data,status,er) {
+        	            alert("error: "+data+" status: "+status+" er:"+er);
+        	        }
+        	    });
+      			addRoleMenu(roleId);
       		});
       		
       		$('#frm-add-role').on('submit', function(e) {

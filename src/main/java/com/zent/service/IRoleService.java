@@ -3,7 +3,6 @@ package com.zent.service;
 import java.util.List;
 
 import com.zent.entities.RoleBO;
-import com.zent.entities.UserBO;
 
 public interface IRoleService {
 	public List<RoleBO> getAll();

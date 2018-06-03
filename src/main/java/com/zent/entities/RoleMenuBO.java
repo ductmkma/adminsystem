@@ -24,6 +24,14 @@ public class RoleMenuBO implements Serializable {
 	private RoleBO role;
 	public RoleMenuBO() {
 	}
+	
+
+	public RoleMenuBO(MenuBO menu, RoleBO role) {
+		super();
+		this.menu = menu;
+		this.role = role;
+	}
+
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

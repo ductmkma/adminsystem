@@ -117,7 +117,7 @@
       	          	 { "data": "address"},
       	         	{ "data": "action",
       	            	render: function (data, type, row) {
-      	                    return '<a class="btn btn-primary btn-sm btn-edit" href="'+ctx+'/edit/'+row.id+'" id="'+row.id+'"  title="Sửa"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Vai trò</a> <a class="btn btn-primary btn-sm btn-edit" href="'+ctx+'/edit/'+row.id+'" id="'+row.id+'"  title="Sửa"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Sửa</a> <a id="'+row.id+'" class="btn btn-danger btn-sm btn-delete " href="javascript:;" title="Xóa" ><i id="deleteUnit" class="fa fa-trash-o" aria-hidden="true"></i> Xóa</a>';
+      	                    return '<a class="btn btn-warning btn-sm btn-role" href="'+ctx+'/users/'+row.id+'/roles" id="'+row.id+'"  title="Vai trò"><i class="fa fa-rocket" aria-hidden="true"></i> </a> <a class="btn btn-primary btn-sm btn-edit" href="'+ctx+'/edit/'+row.id+'" id="'+row.id+'"  title="Sửa"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a> <a id="'+row.id+'" class="btn btn-danger btn-sm btn-delete " href="javascript:;" title="Xóa" ><i id="deleteUnit" class="fa fa-trash-o" aria-hidden="true"></i></a>';
       	            }},  
       	        ]
       	    });

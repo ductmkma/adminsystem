@@ -61,5 +61,9 @@ public class RolePermissionBO implements Serializable {
 	public void setRole(RoleBO role) {
 		this.role = role;
 	}
+	@Override
+	public String toString() {
+		return permission.getName();
+	}
 
 }

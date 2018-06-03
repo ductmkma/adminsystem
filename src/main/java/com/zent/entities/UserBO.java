@@ -200,4 +200,9 @@ public class UserBO implements Serializable, UserDetails {
 		return true;
 	}
 
+	public UserBO(Long id) {
+		super();
+		this.id = id;
+	}
+
 }

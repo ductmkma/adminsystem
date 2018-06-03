@@ -30,6 +30,12 @@ public class UserRoleBO implements Serializable {
 
 	public UserRoleBO() {
 	}
+	
+	public UserRoleBO(UserBO user, RoleBO role) {
+		super();
+		this.user = user;
+		this.role = role;
+	}
 
 	public String getId() {
 		return this.id;
