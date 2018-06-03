@@ -30,12 +30,12 @@
 			<div class="col-md-12 col-sm-12 col-xs-12">
 				<div class="x_panel">
 					<div class="x_title">
-						<h2>Quản lý quyền hạn</h2>
+						<h2>Quản lý quyền hạn - ${role.name}</h2>
 
 						<div class="clearfix"></div>
 					</div>
 					<div class="x_content">
-						<table id="tablerole" class="table table-striped table-bordered dt-responsive nowrap"
+						<table id="tablerolepermission" class="table table-striped table-bordered nowrap"
 							cellspacing="0" width="100%">
 							<thead>
 								<tr>
@@ -73,6 +73,7 @@
 <script type="text/javascript">
 	$(document).ready(function() {
 		var ctx = "${pageContext.request.contextPath}";
+		/* $("#tablerolepermission").DataTable(); */
 	})
    function addPermission(role_id, permission_id) {
 	var ctx = "${pageContext.request.contextPath}";

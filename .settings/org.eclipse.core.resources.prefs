@@ -1,5 +1,8 @@
 eclipse.preferences.version=1
+encoding//src/main/java/com/zent/controller/AuthController.java=UTF-8
 encoding//src/main/java/com/zent/controller/MenuController.java=UTF-8
 encoding//src/main/java/com/zent/controller/UserController.java=UTF-8
 encoding//src/main/java/com/zent/dao/PermissionDAO.java=UTF-8
+encoding//src/main/java/com/zent/dao/RolePermissionDAO.java=UTF-8
 encoding//src/main/java/com/zent/service/UserService.java=UTF-8
+encoding//src/main/webapp/page/index.jsp=UTF-8

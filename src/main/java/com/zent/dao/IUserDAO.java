@@ -11,6 +11,7 @@ public interface IUserDAO extends IBaseDAO<UserBO>{
 	public List<UserBO> getAll();
 	public List<UserBO> search(UserBO userBO,Integer page);
 	public UserBO getUserById(UserBO userBO);
+	public UserBO getUserByUserName(UserBO userBO);
 	public void insert(UserBO userBO);
 	public void update(UserBO userBO);
 	public void delete(UserBO userBO);

@@ -3,6 +3,7 @@ package com.zent.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,6 +33,10 @@ public class MenuService implements IMenuService {
 	@Override
 	public List<MenuBO> getMenusByRoleId(RoleBO roleBO) {
 		return menuDAO.getMenusByRoleId(roleBO);
+	}
+
+	public List<MenuBO> getMenus(List<GrantedAuthority> roleBO) {
+		return menuDAO.getMenus(roleBO);
 	}
 
 }

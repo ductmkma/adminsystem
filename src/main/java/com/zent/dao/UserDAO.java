@@ -68,4 +68,10 @@ public class UserDAO extends BaseDAO<UserBO> implements IUserDAO {
 		return (UserBO) getSession().createQuery("SELECT o FROM UserBO o WHERE o.username=:username")
 				.setParameter("username", username).uniqueResult();
 	}
+
+	@Override
+	public UserBO getUserByUserName(UserBO userBO) {
+		return (UserBO) getSession().createQuery("SELECT u FROM UserBO u WHERE u.username=:username")
+				.setParameter("username", userBO.getUsername()).uniqueResult();
+	}
 }

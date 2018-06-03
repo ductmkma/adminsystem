@@ -4,6 +4,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,7 +20,7 @@ import com.zent.util.JsonResponse;
 public class RoleMenuController {
 	@Autowired
 	IRoleMenuService roleMenuService;
-
+	@PreAuthorize("hasPermission('', 'ADD_ROLE_MENU') or hasPermission('', 'DELETE_ROLE_MENU') ")
 	@RequestMapping(value = "/insertrolemenu", method = RequestMethod.POST)
 	public @ResponseBody JsonResponse add(HttpServletRequest request, HttpServletResponse response, Model model) {
 		String status = request.getParameter("status");

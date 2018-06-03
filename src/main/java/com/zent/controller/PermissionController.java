@@ -9,6 +9,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,10 +23,13 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.zent.dto.UserDTO;
 import com.zent.entities.PermissionBO;
+import com.zent.entities.RoleBO;
 import com.zent.entities.UserBO;
 import com.zent.json.PermissionJson;
 import com.zent.json.UserJson;
+import com.zent.service.IMenuService;
 import com.zent.service.IPermissionService;
+import com.zent.service.IRoleService;
 import com.zent.util.Constants;
 import com.zent.util.JsonResponse;
 
@@ -31,20 +37,27 @@ import com.zent.util.JsonResponse;
 public class PermissionController {
 	@Autowired
 	IPermissionService permissionService;
+	@Autowired
+	IRoleService roleService;
+	@Autowired
+	IMenuService menuService;
 
 	@RequestMapping(value = "/permission", method = RequestMethod.GET)
 	public String getAll(Model model, HttpSession session) {
 		return "permission";
 	}
-
+	@PreAuthorize("hasPermission('', 'VIEW_ROLE_PERMISSION')")
 	@RequestMapping(value = "/role/{id}/permission", method = RequestMethod.GET)
 	public String permission(@PathVariable("id") Long id, Model model, HttpSession session) {
+		model.addAttribute("menus", menuService.getMenus((List<GrantedAuthority>) SecurityContextHolder.getContext().getAuthentication().getAuthorities()));
 		model.addAttribute("roleId", id);
+		model.addAttribute("role", roleService.getUserById(new RoleBO(id)));
 		model.addAttribute("listPermission", permissionService.getAll());
 		model.addAttribute("listRolePermission", permissionService.getAllRolePermission());
 		return "permission";
 	}
 	// add role_permission
+	@PreAuthorize("hasPermission('', 'ADD_ROLE_PERMISSION') or hasPermission('', 'DELETE_ROLE_PERMISSION')")
 	@RequestMapping(value = "/role/{id}/permission", method = RequestMethod.POST)
 	public @ResponseBody JsonResponse add(HttpServletRequest request, HttpServletResponse response, Model model) {
 		Long roleId = Long.parseLong(request.getParameter("role_id"));

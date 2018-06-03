@@ -13,6 +13,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -32,6 +35,7 @@ import com.google.gson.GsonBuilder;
 import com.zent.dto.UserDTO;
 import com.zent.entities.UserBO;
 import com.zent.json.UserJson;
+import com.zent.service.IMenuService;
 import com.zent.service.IUserService;
 import com.zent.util.Constants;
 import com.zent.util.DTOUtils;
@@ -45,7 +49,8 @@ public class UserController {
 	IUserService userService;
 	@Autowired
 	UserDTOValidator userDTOValidator;
-
+	@Autowired
+	IMenuService menuService;
 	@InitBinder
 	protected void initBinder(WebDataBinder binder) {
 		binder.addValidators(userDTOValidator);
@@ -68,21 +73,25 @@ public class UserController {
 	}
 
 	// show
+	@PreAuthorize("hasRole('ROLE_SUPER_ADMIN') and hasPermission('', 'VIEW_USER')")
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String getAll(Model model, HttpSession session) {
 		model.addAttribute("userDTO", new UserDTO());
+		model.addAttribute("menus", menuService.getMenus((List<GrantedAuthority>) SecurityContextHolder.getContext().getAuthentication().getAuthorities()));
 		return "usermanager";
 	}
 
 	// add
+	@PreAuthorize("hasRole('ROLE_SUPER_ADMIN') and hasPermission('', 'ADD_USER')")
 	@RequestMapping(value = "/add", method = RequestMethod.GET)
 	public String add(Model model) {
 		model.addAttribute("userDTO", new UserDTO());
+		model.addAttribute("menus", menuService.getMenus((List<GrantedAuthority>) SecurityContextHolder.getContext().getAuthentication().getAuthorities()));
 		return "add";
 	}
 
 	// add post
-	
+	@PreAuthorize("hasRole('ROLE_SUPER_ADMIN') and hasPermission('', 'ADD_USER')")
 	@RequestMapping(value = "/add", method = RequestMethod.POST)
 	public String addPost(ModelMap modelMap, @ModelAttribute @Validated UserDTO userDTO, BindingResult result,
 			RedirectAttributes redirectAttribute) {
@@ -104,8 +113,10 @@ public class UserController {
 	}
 
 	// edit
+	@PreAuthorize("hasRole('ROLE_SUPER_ADMIN') and hasPermission('', 'EDIT_USER')")
 	@RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
 	public String editUser(@PathVariable("id") Long id, Model model) {
+		model.addAttribute("menus", menuService.getMenus((List<GrantedAuthority>) SecurityContextHolder.getContext().getAuthentication().getAuthorities()));
 		UserBO userBO = new UserBO();
 		userBO.setId(id);
 		UserBO userBOReturn = userService.getUserById(userBO);
@@ -114,7 +125,7 @@ public class UserController {
 		model.addAttribute("userDTO", userDTO);
 		return "edit";
 	}
-
+	@PreAuthorize("hasRole('ROLE_SUPER_ADMIN') and hasPermission('', 'EDIT_USER')")
 	@RequestMapping(value = "/edit/{id}", method = RequestMethod.POST)
 	public String edit(@PathVariable("id") Integer id, ModelMap modelMap, @ModelAttribute @Validated UserDTO userDTO,BindingResult result,RedirectAttributes redirectAttribute) {
 		if (result.hasErrors()) {
@@ -134,6 +145,7 @@ public class UserController {
 	}
 
 	// delete
+	@PreAuthorize("hasRole('ROLE_SUPER_ADMIN') and hasPermission('', 'DELETE_USER')")
 	@RequestMapping(value = "/delete", method = RequestMethod.POST)
 	public @ResponseBody JsonResponse add(HttpServletRequest request, HttpServletResponse response, Model model) {
 		String action = request.getParameter("action");
@@ -155,6 +167,7 @@ public class UserController {
 	}
 
 	// get list user
+	@PreAuthorize("hasRole('ROLE_SUPER_ADMIN') and hasPermission('', 'VIEW_USER')")
 	@RequestMapping(value = "/listuser", method = RequestMethod.GET, produces = "text/plain;charset=UTF-8")
 	public @ResponseBody String springPaginationDataTables(HttpServletRequest request) throws IOException {
 

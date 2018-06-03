@@ -9,6 +9,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,6 +26,7 @@ import com.zent.entities.RoleBO;
 import com.zent.entities.UserBO;
 import com.zent.json.RoleJson;
 import com.zent.json.UserJson;
+import com.zent.service.IMenuService;
 import com.zent.service.IRoleService;
 import com.zent.util.Constants;
 import com.zent.util.DTOUtils;
@@ -32,15 +36,18 @@ import com.zent.util.JsonResponse;
 public class RoleController {
 	@Autowired
 	IRoleService roleService;
-
+	@Autowired 
+	IMenuService menuService;
 	// show
+	@PreAuthorize("hasPermission('', 'VIEW_ROLE')")
 	@RequestMapping(value = "/role", method = RequestMethod.GET)
 	public String getAll(Model model, HttpSession session) {
-		// model.addAttribute("userDTO", new UserDTO());
+		model.addAttribute("menus", menuService.getMenus((List<GrantedAuthority>) SecurityContextHolder.getContext().getAuthentication().getAuthorities()));
 		return "role";
 	}
 
 	// add role
+	@PreAuthorize("hasPermission('', 'ADD_ROLE')")
 	@RequestMapping(value = "/role/add", method = RequestMethod.POST)
 	public @ResponseBody JsonResponse add(HttpServletRequest request, HttpServletResponse response, Model model) {
 		String action = request.getParameter("action");
@@ -63,6 +70,7 @@ public class RoleController {
 	}
 
 	// edit
+	@PreAuthorize("hasPermission('', 'EDIT_ROLE')")
 	@RequestMapping(value = "/role/edit", method = RequestMethod.POST)
 	public @ResponseBody JsonResponse edit(HttpServletRequest request, HttpServletResponse response, Model model) {
 		String action = request.getParameter("action");
@@ -88,6 +96,7 @@ public class RoleController {
 	}
 
 	// delete
+	@PreAuthorize("hasPermission('', 'DELETE_ROLE')")
 	@RequestMapping(value = "/role/delete", method = RequestMethod.POST)
 	public @ResponseBody JsonResponse delete(HttpServletRequest request, HttpServletResponse response, Model model) {
 		String action = request.getParameter("action");
@@ -109,6 +118,7 @@ public class RoleController {
 	}
 
 	// get list user
+	@PreAuthorize("hasPermission('', 'VIEW_ROLE')")
 	@RequestMapping(value = "/listrole", method = RequestMethod.GET, produces = "text/plain;charset=UTF-8")
 	public @ResponseBody String springPaginationDataTables(HttpServletRequest request) throws IOException {
 

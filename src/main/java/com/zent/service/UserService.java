@@ -51,5 +51,9 @@ public class UserService implements IUserService, UserDetailsService { //phải 
 	public UserDetails loadUserByUsername(String username) { //Một hàm cung cấp sẵn từ UserDetailsService
 		return userDAO.loadUserByUsername(username);
 	}
+	@Override
+	public UserBO getUserByUserName(UserBO user) {
+		return userDAO.getUserByUserName(user);
+	}
 
 }

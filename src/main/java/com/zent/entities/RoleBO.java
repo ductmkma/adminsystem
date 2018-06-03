@@ -54,6 +54,11 @@ public class RoleBO implements Serializable {
 	public RoleBO() {
 	}
 
+	public RoleBO(Long id) {
+		super();
+		this.id = id;
+	}
+
 	public Long getId() {
 		return this.id;
 	}

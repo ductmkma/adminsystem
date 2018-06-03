@@ -8,6 +8,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -28,6 +29,7 @@ import com.zent.util.DTOUtils;
 public class MenuController {
 	@Autowired
 	IMenuService menuService;
+	@PreAuthorize("hasPermission('', 'VIEW_ROLE_MENU')")
 	@RequestMapping(value = "/listmenu", method = RequestMethod.GET, produces = "text/plain;charset=UTF-8")
 	public @ResponseBody String getAllMenus(HttpServletRequest request) throws IOException {
 		Long id = Long.parseLong(request.getParameter("id"));
